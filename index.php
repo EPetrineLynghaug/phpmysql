@@ -1,37 +1,10 @@
 <?php
-  $db_host = 'localhost';
-  $db_user = 'root';
-  $db_password = 'root';
-  $db_db = 'testdb';
- 
-  $mysqli = @new mysqli(
-    $db_host,
-    $db_user,
-    $db_password,
-    $db_db
-  );
-	
-  if ($mysqli->connect_error) {
-    echo 'Errno: '.$mysqli->connect_errno;
-    echo '<br>';
-    echo 'Error: '.$mysqli->connect_error;
-    exit();
-  }
+include '_utils.php';
+include '_connection.php';
 
- 
-  //echo 'Success: A proper connection to MySQL was made.';
-  //echo '<br>';
-  //echo 'Host information: '.$mysqli->host_info;
-  //echo '<br>';
-  //echo 'Protocol version: '.$mysqli->protocol_version;
 
   $sql = "SELECT * FROM customers"; 
-  function test_input($data) {
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data;
-  }
+ 
   // $sql = "SELECT * FROM customers WHERE CustomerId=5";//! kan søke etter en bruker fks.
   if (isset($_GET["q"])) {
     $q = test_input($_GET["q"]);
