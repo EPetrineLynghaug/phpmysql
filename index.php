@@ -26,11 +26,18 @@
 
   $sql = "SELECT * FROM customers"; 
   // $sql = "SELECT * FROM customers WHERE CustomerId=5";//! kan søke etter en bruker fks.
-  if (isset($_GET["q"])) {
-    $sql .= " WHERE FirstName LIKE '%{$_GET["q"]}%'";
-  } 
   
-  // var_dump($sql);
+  if (isset($_GET["q"])) {
+    $q = $_GET["q"];
+    $sql .= " WHERE FirstName LIKE '%{$q}%'";
+    $sql .= " OR LastName LIKE '%{$q}%'";
+    $sql .= " OR Adress LIKE '%{$q}%'";
+    $sql .= " OR Zip LIKE '%{$q}%'";
+    $sql .= " OR City LIKE '%{$q}%'";
+  } 
+ 
+  
+  var_dump($sql);
   
   $result = $mysqli->query($sql);
   //$output = $result->num_rows;
