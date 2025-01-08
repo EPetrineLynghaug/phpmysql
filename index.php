@@ -24,11 +24,40 @@
   //echo '<br>';
   //echo 'Protocol version: '.$mysqli->protocol_version;
 
-  $sql = "SELECT * FROM customers";
+  $sql = "SELECT * FROM customers"; 
+  // $sql = "SELECT * FROM customers WHERE CustomerId=5";//! kan søke etter en bruker fks.
+  if (isset($_GET["q"])) {
+    $sql .= " WHERE FirstName LIKE '%{$_GET["q"]}%'";
+  } 
+  
+  // var_dump($sql);
+  
   $result = $mysqli->query($sql);
-  
-  $output = $result->num_rows;
-  
+  //$output = $result->num_rows;
+  $output = "";
+
+  if ($result->num_rows > 0) {
+    // output data of each row
+    while($row = $result->fetch_assoc()) {
+      // $output .= "<li>id: " . $row["CustomerId"]. " - Name: " . 
+      // $row["FirstName"]. " " . $row["LastName"]. "</li>";
+      $output .= "
+        <li>
+          Customer {$row["CustomerId"]}: 
+          <strong>{$row["FirstName"]} {$row["LastName"]}</strong>, 
+          {$row["Address"]}, 
+          {$row["Zip"]} {$row["City"]}
+          </li> 
+          ";  
+    }//! Som js måten men tar ikke høyde for null verdier. 
+    // $output = "<ul>";
+    // while($row = $result->fetch_assoc()) {
+    //   $output .= "<li>id: " . $row["CustomerId"]. " - Name: " . $row["FirstName"]. " " . $row["LastName"]. "</li>";
+    // }
+    $output .= "</ul>";
+  } else {
+    $output = "<p style='color: red'>0 results</p>";
+  }
   $mysqli->close();
 ?>
 <!DOCTYPE html>
@@ -41,6 +70,11 @@
 </head>
 <body>
 <h1>Testing PHP & MySQL</h1>
+  <form>
+    <label for="q"><input id="q" name="q" placeholder="Search">
+    <button id="submitbtn">Submit</button>
+  </form>
+ 
 <?php echo $output; ?>
 </body>
 </html>
