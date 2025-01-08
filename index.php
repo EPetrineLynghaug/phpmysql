@@ -18,6 +18,7 @@
     exit();
   }
 
+ 
   //echo 'Success: A proper connection to MySQL was made.';
   //echo '<br>';
   //echo 'Host information: '.$mysqli->host_info;
@@ -25,21 +26,27 @@
   //echo 'Protocol version: '.$mysqli->protocol_version;
 
   $sql = "SELECT * FROM customers"; 
+  function test_input($data) {
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+  }
   // $sql = "SELECT * FROM customers WHERE CustomerId=5";//! kan søke etter en bruker fks.
-  
   if (isset($_GET["q"])) {
-    $q = $_GET["q"];
+    $q = test_input($_GET["q"]);
     $sql .= " WHERE FirstName LIKE '%{$q}%'";
     $sql .= " OR LastName LIKE '%{$q}%'";
     $sql .= " OR Adress LIKE '%{$q}%'";
     $sql .= " OR Zip LIKE '%{$q}%'";
     $sql .= " OR City LIKE '%{$q}%'";
   } 
- 
-  
-  var_dump($sql);
-  
+
   $result = $mysqli->query($sql);
+  
+  // var_dump($sql);
+  
+ 
   //$output = $result->num_rows;
   $output = "";
 
@@ -81,7 +88,8 @@
     <label for="q"><input id="q" name="q" placeholder="Search">
     <button id="submitbtn">Submit</button>
   </form>
- 
+
 <?php echo $output; ?>
+<p><a href ="./addcustomer.php">Add Customer</a></p>
 </body>
 </html>
